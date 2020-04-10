@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server'
-import { typeDefs } from './typedefs'
+import typeDefs from './typedefs'
 import { resolvers } from './resolvers'
 
 import { PORT } from './config/config'
