@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server'
+import { organizationTypeDefs } from './organization'
 
-export const typeDefs = gql`
+const typeDefs = gql`
   type Query {
     _: Boolean
   }
@@ -9,7 +10,4 @@ export const typeDefs = gql`
     _: Boolean
   }
 `
-
-// export const {
-//   typeDefs: root,
-// }
+export default [typeDefs, organizationTypeDefs]
