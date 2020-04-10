@@ -1,4 +1,8 @@
+import { organizationResolvers } from './organization'
+
 export const resolvers = {
   Query: {},
-  Mutation: {},
+  Mutation: {
+    ...organizationResolvers.Mutation,
+  },
 }
