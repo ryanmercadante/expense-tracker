@@ -3,7 +3,6 @@ import Organization from '../models/organization'
 class OrganizationService {
   static async createOrganization(name) {
     try {
-      console.log('name', name)
       const newOrganization = new Organization({
         name,
         createdAt: new Date().toISOString(),
