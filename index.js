@@ -3,10 +3,7 @@ import mongoose from 'mongoose'
 
 import typeDefs from './typedefs'
 import { resolvers } from './resolvers'
-
 import { PORT, MONGO_URI } from './config/config'
-
-console.log(PORT)
 
 const server = new ApolloServer({
   typeDefs,
