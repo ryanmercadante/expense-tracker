@@ -1,16 +1,27 @@
 import { ApolloServer } from 'apollo-server'
 import mongoose from 'mongoose'
+import jwt from 'jsonwebtoken'
 
 import typeDefs from './typedefs'
 import { resolvers } from './resolvers'
+import { PORT, MONGO_URI, SECRET_KEY } from './config/config'
 
-import { PORT, MONGO_URI } from './config/config'
-
-console.log(PORT)
+const getUserWIthToken = (tokenWithBearer) => {
+  if (tokenWithBearer) {
+    const token = tokenWithBearer.split('Bearer ')[1]
+    return jwt.verify(token, SECRET_KEY)
+  }
+  return null
+}
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => {
+    const token = req.headers.authorization || ''
+    const user = getUserWIthToken(token)
+    return { user }
+  },
 })
 
 mongoose

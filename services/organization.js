@@ -1,4 +1,4 @@
-import Organization from '../models/organization'
+import Organization from '../models/Organization'
 
 class OrganizationService {
   static async createOrganization(name) {
