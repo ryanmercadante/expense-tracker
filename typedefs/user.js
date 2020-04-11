@@ -8,7 +8,7 @@ export const userTypeDefs = gql`
     email: String!
     password: String!
     token: String!
-    organizationId: ID
+    organizationIds: [ID]
     createdAt: String!
     updatedAt: String
   }

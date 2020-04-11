@@ -13,5 +13,7 @@ export const organizationTypeDefs = gql`
 
   extend type Mutation {
     createOrganization(name: String!, password: String!): Organization!
+    joinOrganization(name: String!, password: String!): Organization!
+    leaveOrganization(name: String!): Organization!
   }
 `

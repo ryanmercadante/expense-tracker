@@ -6,10 +6,12 @@ const userSchema = new Schema({
   email: String,
   password: String,
   role: String,
-  organizationId: {
-    type: Schema.Types.ObjectId,
-    ref: 'organizations',
-  },
+  organizationIds: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'organizations',
+    },
+  ],
   createdAt: String,
   updatedAt: String,
 })
