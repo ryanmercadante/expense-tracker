@@ -5,5 +5,6 @@ export const userResolvers = {
   Mutation: {
     register: async (_, { registerInput }) =>
       UserService.register(registerInput),
+    login: async (_, { email, password }) => UserService.login(email, password),
   },
 }
