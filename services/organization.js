@@ -74,6 +74,41 @@ class OrganizationService {
       throw new Error(err)
     }
   }
+
+  static async leaveOrganization(name, user) {
+    try {
+      // find organization and user
+      const [organization, localUser] = await Promise.all([
+        Organization.findOne({ name }),
+        User.findById(user.id),
+      ])
+
+      if (!organization) {
+        throw new UserInputError('Could not find organization')
+      } else if (organization.admin.toString() === user.id) {
+        throw new UserInputError(
+          'Cannot leave organization without reassigning admin role',
+        )
+      }
+
+      // filter out user from org
+      organization.members = organization.members.filter(
+        (memberId) => memberId.toString() !== user.id,
+      )
+      // filter out org from user
+      localUser.organizationIds = localUser.organizationIds.filter(
+        (orgId) => orgId.toString() !== organization._id.toString(),
+      )
+
+      // save changes to database
+      await Promise.all([organization.save(), localUser.save()])
+
+      return organization
+    } catch (err) {
+      console.error('Something went wrong leaving organization:', err)
+      throw new Error(err)
+    }
+  }
 }
 
 export default OrganizationService
