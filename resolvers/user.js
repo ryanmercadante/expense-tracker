@@ -1,4 +1,4 @@
-import UserService from '../services/organization'
+import UserService from '../services/user'
 
 export const userResolvers = {
   Query: {},
