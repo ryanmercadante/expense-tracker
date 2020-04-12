@@ -13,6 +13,12 @@ const organizationSchema = new Schema({
       ref: 'users',
     },
   ],
+  expenses: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'expenses',
+    },
+  ],
   createdAt: String,
   updatedAt: String,
 })

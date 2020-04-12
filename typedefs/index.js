@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server'
 import { organizationTypeDefs } from './organization'
 import { userTypeDefs } from './user'
+import { expenseTypeDefs } from './expense'
 
 const typeDefs = gql`
   type Query {
@@ -11,4 +12,4 @@ const typeDefs = gql`
     _: Boolean
   }
 `
-export default [typeDefs, organizationTypeDefs, userTypeDefs]
+export default [typeDefs, organizationTypeDefs, userTypeDefs, expenseTypeDefs]
