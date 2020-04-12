@@ -6,11 +6,11 @@ const expenseSchema = new Schema({
   price: Number,
   userId: {
     type: Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'User',
   },
   organizationId: {
     type: Schema.Types.ObjectId,
-    ref: 'organizations',
+    ref: 'Organization',
   },
   createdAt: String,
   updatedAt: String,

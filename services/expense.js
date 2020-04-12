@@ -1,8 +1,11 @@
-import Organization from '../models/Organization'
 import { AuthenticationError, UserInputError } from 'apollo-server'
 
+import Organization from '../models/Organization'
+import User from '../models/User'
+import Expense from '../models/Expense'
+
 class ExpenseService {
-  static async getExpenses(orgName, user) {
+  static async getExpenses(orgId, user) {
     try {
       // check for user
       if (!user) {
@@ -11,19 +14,23 @@ class ExpenseService {
         )
       }
 
-      const organization = await Organization.findOne({ name: orgName })
+      const [expenses, organization] = await Promise.all([
+        Expense.find({ organizationId: orgId }),
+        Organization.findById(orgId),
+      ])
+
       if (!organization) {
         throw new UserInputError("That organization doesn't exist")
       }
 
       // make sure user is part of org
-      if (!organization.members.includes(user.id)) {
+      if (!organization.members.includes(user.id.toString())) {
         throw new AuthenticationError(
           'User is not part of organization. Cannot get expenses',
         )
       }
 
-      return organization.expenses
+      return expenses
     } catch (err) {
       console.error('Error getting expenses for that organization:', err)
       throw new Error(err)
@@ -39,7 +46,10 @@ class ExpenseService {
         )
       }
 
-      const organization = await Organization.findOne({ name: orgName })
+      const [organization, localUser] = await Promise.all([
+        Organization.findOne({ name: orgName }),
+        User.findById(user.id),
+      ])
       if (!organization) {
         throw new UserInputError("That organization doesn't exist")
       }
@@ -50,6 +60,20 @@ class ExpenseService {
           'User is not part of organization. Cannot get expenses',
         )
       }
+
+      const newExpense = new Expense({
+        ...expense,
+        userId: user.id,
+        organizationId: organization._id,
+        createdAt: new Date().toString(),
+      })
+
+      // push expense id onto organization array of expenses
+      organization.expenses.push(newExpense._id)
+
+      await Promise.all([organization.save(), newExpense.save()])
+
+      return newExpense
     } catch (err) {
       console.error('Error creating expense for that organization:', err)
       throw new Error(err)

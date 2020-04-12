@@ -19,7 +19,7 @@ export const expenseTypeDefs = gql`
   }
 
   extend type Query {
-    getExpenses(orgName: String!): [Expense!]!
+    getExpenses(orgId: String!): [Expense!]!
   }
 
   extend type Mutation {

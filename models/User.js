@@ -9,7 +9,7 @@ const userSchema = new Schema({
   organizationIds: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'organizations',
+      ref: 'Organization',
     },
   ],
   createdAt: String,
