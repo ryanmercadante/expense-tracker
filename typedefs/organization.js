@@ -15,5 +15,6 @@ export const organizationTypeDefs = gql`
     createOrganization(name: String!, password: String!): Organization!
     joinOrganization(name: String!, password: String!): Organization!
     leaveOrganization(name: String!): Organization!
+    changeAdmin(name: String!, newAdminId: String!): Organization!
   }
 `

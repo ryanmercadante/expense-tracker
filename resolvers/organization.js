@@ -9,5 +9,7 @@ export const organizationResolvers = {
       OrganizationService.joinOrganization(name, password, user),
     leaveOrganization: async (_, { name }, { user }) =>
       OrganizationService.leaveOrganization(name, user),
+    changeAdmin: async (_, { name, newAdminId }, { user }) =>
+      OrganizationService.changeAdmin(name, newAdminId, user),
   },
 }

@@ -49,7 +49,7 @@ class OrganizationService {
       // check for user
       if (!user) {
         throw new AuthenticationError(
-          'You must have a user account to create an organization',
+          'You must have a user account to join an organization',
         )
       }
 
@@ -77,6 +77,13 @@ class OrganizationService {
 
   static async leaveOrganization(name, user) {
     try {
+      // check for user
+      if (!user) {
+        throw new AuthenticationError(
+          'You must have a user account to leave an organization',
+        )
+      }
+
       // find organization and user
       const [organization, localUser] = await Promise.all([
         Organization.findOne({ name }),
@@ -106,6 +113,70 @@ class OrganizationService {
       return organization
     } catch (err) {
       console.error('Something went wrong leaving organization:', err)
+      throw new Error(err)
+    }
+  }
+
+  static async changeAdmin(name, newAdminId, user) {
+    try {
+      // check for user
+      if (!user) {
+        throw new AuthenticationError(
+          'You must have a user account to change an admin of an organization',
+        )
+      }
+
+      // find organization and newAdmin
+      const [organization, newAdmin] = await Promise.all([
+        Organization.findOne({ name }),
+        User.findById(newAdminId),
+      ])
+
+      if (!organization) {
+        throw new UserInputError('Could not find organization')
+      }
+
+      // make sure current user is admin
+      if (user.id !== organization.admin.toString()) {
+        throw new Error('You are not the admin. Cannot reassign admin status.')
+      }
+
+      // Make sure other memebers exist
+      if (organization.members.length === 1) {
+        throw new Error(
+          'You are the only member of the organization. Cannot reassign admin status.',
+        )
+      }
+
+      // Check for newAdminId in members list
+      const memberExists = organization.members.find(
+        (memberId) => memberId.toString() === newAdmin._id.toString(),
+      )
+      if (!memberExists) {
+        throw new UserInputError('That member is not part of the organization')
+      }
+
+      // make sure newAdmin is not already admin
+      if (organization.admin.toString() === newAdmin._id.toString()) {
+        throw new UserInputError('You are already the admin')
+      }
+
+      // update organization with new admin
+      const updatedOrganization = await Organization.findOneAndUpdate(
+        { name },
+        {
+          $set: {
+            admin: newAdmin._id,
+          },
+        },
+        {
+          new: true,
+        },
+      )
+
+      return updatedOrganization
+    } catch (err) {
+      console.error('Something went wrong changing organization admin:', err)
       throw new Error(err)
     }
   }
