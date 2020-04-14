@@ -8,5 +8,7 @@ export const expenseResolvers = {
   Mutation: {
     addExpense: (_, { orgName, expense }, { user }) =>
       ExpenseService.addExpense(orgName, expense, user),
+    updateExpense: (_, { expenseId, expense }, { user }) =>
+      ExpenseService.updateExpense(expenseId, expense, user),
   },
 }

@@ -16,6 +16,7 @@ export const expenseTypeDefs = gql`
     title: String!
     description: String
     price: Float!
+    userId: String
   }
 
   extend type Query {
@@ -24,5 +25,6 @@ export const expenseTypeDefs = gql`
 
   extend type Mutation {
     addExpense(orgName: String!, expense: ExpenseInput!): Expense!
+    updateExpense(expenseId: String!, expense: ExpenseInput!): Expense!
   }
 `

@@ -79,6 +79,48 @@ class ExpenseService {
       throw new Error(err)
     }
   }
+
+  static async updateExpense(expenseId, expense, user) {
+    try {
+      // check for user
+      if (!user) {
+        throw new AuthenticationError(
+          'You must have a user account and be part of an organization to add an expense',
+        )
+      }
+
+      // check if user created expense
+      if (user.id !== expense.userId) {
+        throw new AuthenticationError(
+          'Cannot update an expense that you did not create',
+        )
+      }
+
+      const updatedExpense = await Expense.findByIdAndUpdate(
+        expenseId,
+        {
+          $set: {
+            ...expense,
+            updatedAt: new Date().toString(),
+          },
+        },
+        {
+          new: true,
+        },
+      )
+      if (!updatedExpense) {
+        throw new UserInputError('Could not find expense with that Id')
+      }
+
+      return {
+        ...updatedExpense._doc,
+        id: updatedExpense._id,
+      }
+    } catch (err) {
+      console.error('Error updating expense for that organization:', err)
+      throw new Error(err)
+    }
+  }
 }
 
 export default ExpenseService
