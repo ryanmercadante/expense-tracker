@@ -7,6 +7,7 @@ export const organizationTypeDefs = gql`
     password: String!
     admin: ID!
     members: [ID!]!
+    expenses: [ID!]!
     createdAt: String!
     updatedAt: String
   }

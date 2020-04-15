@@ -5,12 +5,18 @@ const organizationSchema = new Schema({
   password: String,
   admin: {
     type: Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'User',
   },
   members: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'users',
+      ref: 'User',
+    },
+  ],
+  expenses: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Expense',
     },
   ],
   createdAt: String,
