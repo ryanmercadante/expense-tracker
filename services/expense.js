@@ -121,6 +121,42 @@ class ExpenseService {
       throw new Error(err)
     }
   }
+
+  // Only the admin of the organization can delete an expense
+  static async deleteExpense(expenseId, organizationId, user) {
+    try {
+      // check for user
+      if (!user) {
+        throw new AuthenticationError(
+          'You must have a user account and be part of an organization to add an expense',
+        )
+      }
+
+      const [organization, expense] = await Promise.all([
+        Organization.findById(organizationId),
+        Expense.findById(expenseId),
+      ])
+      if (!organization) {
+        throw new UserInputError('No organization with that Id')
+      }
+      if (!expense) {
+        throw new UserInputError('No expense with that Id')
+      }
+
+      if (user.id !== organization.admin.toString()) {
+        throw new AuthenticationError(
+          'You do not have access to delete an expense',
+        )
+      } else {
+        await expense.delete()
+      }
+
+      return expense
+    } catch (err) {
+      console.error('Error deleting expense for that organization:', err)
+      throw new Error(err)
+    }
+  }
 }
 
 export default ExpenseService

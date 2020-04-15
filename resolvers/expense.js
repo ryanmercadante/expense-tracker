@@ -10,5 +10,7 @@ export const expenseResolvers = {
       ExpenseService.addExpense(orgName, expense, user),
     updateExpense: (_, { expenseId, expense }, { user }) =>
       ExpenseService.updateExpense(expenseId, expense, user),
+    deleteExpense: (_, { expenseId, orgId }, { user }) =>
+      ExpenseService.deleteExpense(expenseId, orgId, user),
   },
 }

@@ -26,5 +26,6 @@ export const expenseTypeDefs = gql`
   extend type Mutation {
     addExpense(orgName: String!, expense: ExpenseInput!): Expense!
     updateExpense(expenseId: String!, expense: ExpenseInput!): Expense!
+    deleteExpense(expenseId: String!, orgId: String!): Expense!
   }
 `
